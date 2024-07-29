@@ -6,7 +6,8 @@ export default{
   data(){
     return {
       newNote: "",
-      notes: []
+      notes: [] as string[],
+      identity: undefined as undefined | Identity
     }
   },
   methods: {
@@ -16,6 +17,17 @@ export default{
     },
     async getNotes() {
       this.notes = await chat_backend.get_notes()
+    },
+    async login() {
+      const authClient = await AuthClient.create();
+      await authClient.login({
+        identityProvider: "http://by6od-j4aaa-aaaaa-qaadq-cai.localhost:4943/"
+      })
+
+      const identity = authClient.getIdentity();
+      console.log("Logged in ", identity.getPrincipal())
+      this.identity = identity;
+      //const agent = new HttpAgent({identity})
     }
   },
   mounted(){
@@ -29,8 +41,9 @@ export default{
     <img src="/logo2.svg" alt="DFINITY logo" />
     <br />
     <br />
+    {{ identity?.getPrincipal() }} <button @click="login">login</button>
     <div>
-      {{ newNote }}
+      {{ notes }}
     </div>
     <div>
       <textarea v-model="newNote"></textarea
