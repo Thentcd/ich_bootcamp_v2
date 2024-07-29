@@ -23,10 +23,10 @@ fn add_note(note: String) {
     NOTES.with_borrow_mut(|notes| {
         let mut_notes = notes.get_mut(&user);
 
-        if let Some(notes_vec) = mut_notes{
-            notes_vec.push(note)
-        }else {
-            notes.insert(user, vec![note])
+        if let Some(notes_vec) = mut_notes {
+            notes_vec.push(note);
+        } else {
+            notes.insert(user, vec![note]);
         }
     })
 }

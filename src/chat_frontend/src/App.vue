@@ -1,13 +1,16 @@
 <script lang="'ts'">
 import { ref } from 'vue';
 import { chat_backend } from '../../declarations/chat_backend';
+import { AuthClient } from '@dfinity/auth-client';
+import { HttpAgent } from '@dfinity/agent';
+import { Identity } from '@dfinity/agent';
 
 export default{
   data(){
     return {
       newNote: "",
-      notes: [] as string[],
-      identity: undefined as undefined | Identity
+      notes: [],
+      identity: undefined
     }
   },
   methods: {
