@@ -1,15 +1,26 @@
-<script setup>
+<script lang="'ts'">
 import { ref } from 'vue';
-import { chat_backend } from 'declarations/chat_backend/index';
-let greeting = ref('');
+import { chat_backend } from '../../declarations/chat_backend';
 
-async function handleSubmit(e) {
-  e.preventDefault();
-  const target = e.target;
-  const name = target.querySelector('#name').value;
-  await chat_backend.greet(name).then((response) => {
-    greeting.value = response;
-  });
+export default{
+  data(){
+    return {
+      newNote: "",
+      notes: []
+    }
+  },
+  methods: {
+    async addNote(){
+      await chat_backend.add_note(this.newNote)
+      await this.getNotes()
+    },
+    async getNotes() {
+      this.notes = await chat_backend.get_notes()
+    }
+  },
+  mounted(){
+    this.getNotes()
+  }
 }
 </script>
 
@@ -18,11 +29,12 @@ async function handleSubmit(e) {
     <img src="/logo2.svg" alt="DFINITY logo" />
     <br />
     <br />
-    <form action="#" @submit="handleSubmit">
-      <label for="name">Enter your name: &nbsp;</label>
-      <input id="name" alt="Name" type="text" />
-      <button type="submit">Click Me!</button>
-    </form>
-    <section id="greeting">{{ greeting }}</section>
+    <div>
+      {{ newNote }}
+    </div>
+    <div>
+      <textarea v-model="newNote"></textarea
+      ><button @click="addNote">Add Note</button>
+    </div>
   </main>
 </template>
